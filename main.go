@@ -3,23 +3,23 @@ package main
 import (
 	"net/http"
 
+	"github.com/ResulShamuhammedov/howabot/handlers"
 	"github.com/ResulShamuhammedov/howabot/models"
 	"github.com/ResulShamuhammedov/howabot/utils"
+	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
 )
 
-var Config models.Configuration
-
 func main() {
 
-	Config, err := utils.ReadConfig("config.json")
+	err := utils.ReadConfig("config.json")
 	if err != nil {
 		eMsg := "Error in reading configuration"
 		logrus.WithError(err).Error(eMsg)
 		return
 	}
 
-	err = setupServer(Config)
+	err = setupServer(&utils.Config)
 	if err != nil {
 		logrus.WithError(err).Error("Couldn't start server")
 		return
@@ -28,15 +28,16 @@ func main() {
 }
 
 func setupServer(config *models.Configuration) error {
-	mux := http.NewServeMux()
+	r := mux.NewRouter()
 
-	mux.HandleFunc("/hello", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello ...."))
+	r.HandleFunc("/hello", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("Hello ..."))
 	})
+	r.HandleFunc("/{city}", handlers.HandleWeather)
 
 	logrus.Info("Listen on port " + config.ListenPort)
 
-	err := http.ListenAndServe(config.ListenPort, mux)
+	err := http.ListenAndServe(config.ListenPort, r)
 	if err != nil {
 		logrus.WithError(err).Error("Couldn't listen and serve")
 		return err

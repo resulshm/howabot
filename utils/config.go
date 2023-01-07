@@ -8,12 +8,14 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func ReadConfig(source string) (*models.Configuration, error) {
+var Config models.Configuration
+
+func ReadConfig(source string) error {
 	bytes, err := ioutil.ReadFile(source)
 	if err != nil {
 		eMsg := "Couldn't read configuration file"
 		logrus.WithError(err).Error(eMsg)
-		return nil, err
+		return err
 	}
 
 	conf := &models.Configuration{}
@@ -21,8 +23,10 @@ func ReadConfig(source string) (*models.Configuration, error) {
 	if err != nil {
 		eMsg := "Couldn't parse config file from json"
 		logrus.WithError(err).Error(eMsg)
-		return nil, err
+		return err
 	}
 
-	return conf, nil
+	Config = *conf
+
+	return nil
 }
