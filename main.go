@@ -2,8 +2,11 @@ package main
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"net/http"
 
+	"github.com/ResulShamuhammedov/howabot/api"
 	"github.com/ResulShamuhammedov/howabot/handlers"
 	"github.com/ResulShamuhammedov/howabot/models"
 	"github.com/ResulShamuhammedov/howabot/utils"
@@ -54,12 +57,23 @@ func setupServer(config *models.Configuration) error {
 func startBot(config *models.Configuration) error {
 	bot := slacker.NewClient(config.SlackBotToken, config.SlackAppToken)
 	definition := &slacker.CommandDefinition{
+		Description: "Weather",
+		Examples:    []string{"weather London"},
 		Handler: func(botCtx slacker.BotContext, request slacker.Request, response slacker.ResponseWriter) {
-			response.Reply("pong")
+			city := request.Param("city")
+			fmt.Println(city)
+			data, err := api.GetWeather(city)
+			if err != nil {
+				eMsg := "Couldn't get weather, city: " + city
+				logrus.WithError(err).Error(eMsg)
+				return
+			}
+			out, _ := json.Marshal(data)
+			response.Reply(string(out))
 		},
 	}
 
-	bot.Command("ping", definition)
+	bot.Command("weather {city}", definition)
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
