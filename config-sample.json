@@ -1,4 +1,7 @@
 {
-    "listen_port": ":3000",
-    "open_weather_api_key": ""
+    "listen_port":":3000",
+    "open_weather_api_key": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "slack_app_token": "xapp-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "slack_bot_token": "xoxb-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
 }
