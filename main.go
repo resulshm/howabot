@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 
 	"github.com/ResulShamuhammedov/howabot/api"
@@ -42,8 +41,19 @@ func startBot(config *models.Configuration) error {
 				logrus.WithError(err).Error(eMsg)
 				return
 			}
-			out, _ := json.Marshal(data)
-			response.Reply(string(out))
+
+			message := fmt.Sprintf(models.ResponseFormat,
+				data.City,
+				data.Weather[0].Main, data.Weather[0].Description,
+				data.Main.Temperature-273.15, data.Main.Temperature,
+				data.Main.FeelsLike-273.15, data.Main.FeelsLike,
+				data.Main.Pressure,
+				data.Main.Humidity,
+				data.Visibility,
+				data.Wind.Speed,
+			)
+			// out, _ := json.Marshal(data)
+			response.Reply(message)
 		},
 	}
 
