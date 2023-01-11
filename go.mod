@@ -3,7 +3,6 @@ module github.com/ResulShamuhammedov/howabot
 go 1.19
 
 require (
-	github.com/gorilla/mux v1.8.0
 	github.com/shomali11/slacker v1.3.0
 	github.com/sirupsen/logrus v1.9.0
 )

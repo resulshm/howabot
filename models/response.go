@@ -1,7 +1,7 @@
 package models
 
 const ResponseFormat = `	
-	City: %s
+		Location: %s
 	Weather: %s (%s)
 	Temperature: %0.2f°C or %0.2fK
 	Feels like: %0.2f°C or %0.2fK
@@ -11,8 +11,8 @@ const ResponseFormat = `
 	Wind speed: %0.2f meter/sec`
 
 type WeatherData struct {
-	City    string `json:"name"`
-	Weather []struct {
+	Location string `json:"name"`
+	Weather  []struct {
 		Main        string `json:"main"`
 		Description string `json:"description"`
 	} `json:"weather"`

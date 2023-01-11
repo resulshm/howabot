@@ -12,16 +12,17 @@ import (
 
 var OpenWeatherURL = "http://api.openweathermap.org/data/2.5/weather?APPID=%s&q=%s"
 
-func GetWeather(city string) (*models.WeatherData, error) {
+func GetWeather(location string) (*models.WeatherData, error) {
 
-	respData, err := http.Get(fmt.Sprintf(OpenWeatherURL, utils.Config.OpenWeatherApiKey, city))
+	respData, err := http.Get(fmt.Sprintf(OpenWeatherURL, utils.Config.OpenWeatherApiKey, location))
 	if err != nil {
-		eMsg := "Couldn't get response from OpenWeatherMap, city: " + city
+		eMsg := "Couldn't get response from OpenWeatherMap, location: " + location
 		logrus.WithError(err).Error(eMsg)
 		return nil, nil
 	}
 
 	defer respData.Body.Close()
+
 	d := &models.WeatherData{}
 	err = json.NewDecoder(respData.Body).Decode(&d)
 	if err != nil {
@@ -29,5 +30,6 @@ func GetWeather(city string) (*models.WeatherData, error) {
 		logrus.WithError(err).Error(eMsg)
 		return nil, err
 	}
+
 	return d, nil
 }
